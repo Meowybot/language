@@ -45,27 +45,47 @@ function meowy.loadfile(filename, isLove)
   return codepiece
 end
 
+function meowy.toLF(line)
+  local luas = ""
+  if meowy.funcs[line[1]] then
+    luas = luas .. "meowy.funcs['" .. line[1] .. "']("
+  else
+    luas = luas .. line[1] .. "("
+  end
+  if #line >= 2 then
+    local hasP = false
+    local PaCaI = 1
+    local PaCaS = 0
+    for i = 2, #line do
+      if hasP then
+        if string.sub(line[i], -1, -1) == ")" then
+          PaCaI = i
+        end
+      else
+        if string.sub(line[i], 1, 1) == "(" then
+          hasP = true
+        end
+      end
+      if not hasP then
+        luas = luas .. line[i]
+        if i ~= #line then
+          luas = luas .. ", "
+        end
+      end
+    end
+  end
+  luas = luas .. [[)
+]]
+  return luas
+end
+
 function meowy.toLua(codepiece, isString)
   local nests = 1
   local nestids = {"main"}
   local luafunc = ""
   for li, line in ipairs(codepiece) do
     if not meowy.reservedstrings[line[1]] then
-      if meowy.funcs[line[1]] then
-        luafunc = luafunc .. "meowy.funcs['" .. line[1] .. "']("
-      else
-        luafunc = luafunc .. line[1] .. "("
-      end
-      if #line >= 2 then
-        for i = 2, #line do
-          luafunc = luafunc .. line[i]
-          if i ~= #line then
-            luafunc = luafunc .. ", "
-          end
-        end
-      end
-      luafunc = luafunc .. [[)
-]]
+      meowy.toLF(line)
     else
       if line[1] == "define" then
         luafunc = luafunc .. "function " .. line[2] .. "("
