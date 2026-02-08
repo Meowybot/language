@@ -1,5 +1,4 @@
 local meowy = {}
-meowy.loadedlines = {}
 meowy.reservedstrings = {
 ["if"] = true,
 ["?"] = true,
@@ -107,7 +106,7 @@ function meowy.toLua(codepiece, isString)
   local luafunc = ""
   for li, line in ipairs(codepiece) do
     if not meowy.reservedstrings[line[1]] then
-      luas = luas .. meowy.toLF(line) .. [[
+      luafunc = luafunc .. meowy.toLF(line) .. [[
 ]]
     else
       if line[1] == "define" then
