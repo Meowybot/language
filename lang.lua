@@ -4,7 +4,9 @@ meowy.reservedstrings = {
 ["if"] = true,
 ["?"] = true,
 ["define"] = true,
+["}"] = true,
 ["while"] = true,
+["]"] = true,
 ["true"] = true,
 ["false"] = true,
 ["return"] = true,
@@ -77,6 +79,13 @@ function meowy.toLua(codepiece, isString)
         end
         luafunc = luafunc .. [[)
 ]]
+        nests = nests + 1
+        table.insert(nestids, "def")
+      elseif line[1] == "}" then
+        if nestids[#nestids] == "def" then
+          nests = nests - 1
+          nestids[#nestids] = nil
+        end
       elseif line[1] == "if" then
       end
     end
