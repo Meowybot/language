@@ -52,11 +52,29 @@ function meowy.toLua(codepiece, isString)
       luafunc = luafunc .. line[1] .. "("
       if #line >= 2 then
         for i = 2, #line do
-          luafunc = luafunc .. line[i] .. ", "
+          luafunc = luafunc .. line[i]
+          if i ~= #line then
+            luafunc = luafunc .. ", "
+          end
         end
       end
       luafunc = luafunc .. [[)
 ]]
+    else
+      if line[1] == "define" then
+        luafunc = luafunc .. "function " .. line[2] .. "("
+        if #line >= 4 then
+          for i = 3, #line - 1 do
+            luafunc = luafunc .. line[i]
+            if i ~= #line - 1 then
+              luafunc = luafunc .. ", "
+            end
+          end
+        end
+        luafunc = luafunc .. [[)
+]]
+      elseif line[1] == "if" then
+      end
     end
   end
 end
