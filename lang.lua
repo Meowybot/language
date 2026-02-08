@@ -8,10 +8,20 @@ meowy.reservedstrings = {
 ["true"] = true,
 ["false"] = true,
 ["return"] = true,
-["break"] = true
+["break"] = true,
+["var"] = true,
+["local"] = true
 }
 
 meowy.funcs = {}
+
+function meowy.funcs["print"](...)
+  local s = ""
+  for i, v in ipairs({...}) do
+    s = s .. v .. "  "
+  end
+  print(s)
+end
 
 function meowy.loadfile(filename, isLove)
   local codepiece = {}
