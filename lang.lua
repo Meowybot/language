@@ -64,6 +64,7 @@ function meowy.toLF(line)
       else
         if string.sub(line[i], 1, 1) == "(" then
           hasP = true
+          PaCaS = i
         end
       end
       if not hasP then
@@ -73,9 +74,30 @@ function meowy.toLF(line)
         end
       end
     end
+    if hasP then
+      local t = {}
+      t[1] = string.sub(line[PaCaS], 2, -1)
+      for i = PaCaS + 1, PaCaI - 1 do
+        table.insert(t, line[i])
+      end
+      table.insert(t, string.sub(line[PaCaI], 1, -2)
+      luas = luas .. meowy.toLF(t)
+      if PaCaI ~= #line then
+        luas = luas .. ", "
+      end
+    end
+    if hasP then
+      if #line > PaCaI then
+        for i = PaCaI + 1, #line do
+          luas = luas .. line[i]
+          if i ~= #line then
+            luas = luas .. ", "
+          end
+        end
+      end
+    end
   end
-  luas = luas .. [[)
-]]
+  luas = luas .. ")"
   return luas
 end
 
@@ -85,7 +107,8 @@ function meowy.toLua(codepiece, isString)
   local luafunc = ""
   for li, line in ipairs(codepiece) do
     if not meowy.reservedstrings[line[1]] then
-      meowy.toLF(line)
+      luas = luas .. meowy.toLF(line) .. [[
+]]
     else
       if line[1] == "define" then
         luafunc = luafunc .. "function " .. line[2] .. "("
