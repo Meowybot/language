@@ -49,7 +49,7 @@ function meowy.toLua(codepiece, isString)
   local luafunc = ""
   for li, line in ipairs(codepiece) do
     if not meowy.reservedstrings[line[1]] then
-      luafunc = luafunc .. line[1] .. "("
+      luafunc = luafunc .. "meowy.funcs['" .. line[1] .. "']("
       if #line >= 2 then
         for i = 2, #line do
           luafunc = luafunc .. line[i]
