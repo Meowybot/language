@@ -11,6 +11,8 @@ meowy.reservedstrings = {
 ["break"] = true
 }
 
+meowy.funcs = {}
+
 function meowy.loadfile(filename, isLove)
   local codepiece = {}
   print("loading file")
@@ -29,4 +31,22 @@ function meowy.loadfile(filename, isLove)
     i = i + 1
   end
   return codepiece
+end
+
+function meowy.toLua(codepiece, isString)
+  local nests = 1
+  local nestids = {"main"}
+  local luafunc = ""
+  for li, line in ipairs(codepiece) do
+    if not meowy.reservedstrings[line[1]] then
+      luafunc = luafunc .. line[1] .. "("
+      if #line >= 2 then
+        for i = 2, #line do
+          luafunc = luafunc .. line[i] .. ", "
+        end
+      end
+      luafunc = luafunc .. [[)
+]]
+    end
+  end
 end
