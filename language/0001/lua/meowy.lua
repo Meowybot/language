@@ -145,8 +145,7 @@ function meowy.toLua(codepiece, isString)
             end
           end
         end
-        luafunc = luafunc .. [[)
-]]
+        luafunc = luafunc .. ")" .. "\n"
         nests = nests + 1
         table.insert(nestids, "def")
       elseif line[1] == "}" then
@@ -154,7 +153,32 @@ function meowy.toLua(codepiece, isString)
           nests = nests - 1
           nestids[#nestids] = nil
         end
+        luafunc = luafunc .. "end" .. "\n"
       elseif line[1] == "if" then
+        luafunc = luafunc .. "if "
+        if string.sub(line[2], 1, 1) == "(" then
+          if (#line - 1) == 2 then
+            luafunc = luafunc .. meowy.toLF({string.sub(line[2], 2, -2)})
+          elseif (#line - 1) == 3 then
+            luafunc = luafunc .. meowy.toLF({string.sub(line[2], 2, -1), string.sub(line[3], 1, -2)})
+          else
+            local subl = {}
+            subl[1] = string.sub(line[2], 2, -1)
+            for i = 3, #line - 2 do
+              table.insert(subl, line[i])
+            end
+            table.insert(subl, string.sub(line[#line - 1], 1, -2))
+            luafunc = luafunc .. meowy.toLF(subl)
+          end
+        else
+          if #line >= 4 then
+            error("Parentheses not opened at Meowy file, line " .. li .. ".")
+          else
+            luafunc = luafunc .. line[2]
+          end
+        end
+        luafunc = luafunc .. " then"
+      elseif line[1] == "?" then
       end
     end
   end
