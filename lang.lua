@@ -11,7 +11,9 @@ meowy.reservedstrings = {
 ["return"] = true,
 ["break"] = true,
 ["var"] = true,
-["local"] = true
+["local"] = true,
+["arr"] = true,
+["dic"] = true
 }
 
 meowy.funcs = {}
@@ -40,6 +42,13 @@ function meowy.funcs['div'](a, b)
   return a/b
 end
 
+meowy.vars = {}
+meowy.tab = {}
+meowy.tab.arr = {}
+meowy.tab.dic = {}
+meowy.uf = {}
+meowy.lf = {}
+
 function meowy.loadfile(filename, isLove)
   local codepiece = {}
   print("loading file")
@@ -62,10 +71,12 @@ end
 
 function meowy.toLF(line)
   local luas = ""
-  if meowy.funcs[line[1]] then
-    luas = luas .. "meowy.funcs['" .. line[1] .. "']("
+  if meowy.uf[line[1]] then
+    luas = luas .. "meowy.uf['" .. line[1] .. "']("
+  elseif meowy.lf[line[1]] then
+    luas = luas .. "meowy.lf['" .. line[1] .. "']("
   else
-    luas = luas .. line[1] .. "("
+    luas = luas .. "meowy.funcs['" .. line[1] .. "']("
   end
   if #line >= 2 then
     local hasP = false
@@ -122,11 +133,10 @@ function meowy.toLua(codepiece, isString)
   local luafunc = ""
   for li, line in ipairs(codepiece) do
     if not meowy.reservedstrings[line[1]] then
-      luafunc = luafunc .. meowy.toLF(line) .. [[
-]]
+      luafunc = luafunc .. meowy.toLF(line) .. "\n"
     else
       if line[1] == "define" then
-        luafunc = luafunc .. "function " .. line[2] .. "("
+        luafunc = luafunc .. "function meowy.uf['" .. line[2] .. "']("
         if #line >= 4 then
           for i = 3, #line - 1 do
             luafunc = luafunc .. line[i]
