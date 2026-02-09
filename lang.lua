@@ -16,12 +16,28 @@ meowy.reservedstrings = {
 
 meowy.funcs = {}
 
-function meowy.funcs["print"](...)
+function meowy.funcs['print'](...)
   local s = ""
   for i, v in ipairs({...}) do
     s = s .. v .. "  "
   end
   print(s)
+end
+
+function meowy.funcs['add'](a, b)
+  return a+b
+end
+
+function meowy.funcs['sub'](a, b)
+  return a-b
+end
+
+function meowy.funcs['mul'](a, b)
+  return a*b
+end
+
+function meowy.funcs['div'](a, b)
+  return a/b
 end
 
 function meowy.loadfile(filename, isLove)
