@@ -15,6 +15,10 @@ function meowy.reserved['define'](line, luas, d)
   luas = luas .. ")" .. "\n"
 end
 
+function meowy.reserved['}'](line, luas, d)
+  luas = luas .. "end" .. "\n"
+end
+
 
 meowy.funcs = {}
 
