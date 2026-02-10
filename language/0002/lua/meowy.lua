@@ -33,6 +33,27 @@ meowy.specialFuncs = {}
 meowy.specialWords = {}
 
 
+function meowy.loadFile(filename, isLove)
+  local itfunc = io.lines
+  if isLove then
+    itfunc = love.filesystem.lines
+  end
+  local t = {}
+  for line in itfunc(filename) do
+    local l = {}
+    for word in string.gmatch(line, "%S+")
+      table.insert(l, word)
+    end
+    table.insert(t, l)
+  end
+  return t
+end
+
 function meowy.toLuaFunc(line, d)
   --please help
+end
+
+function meowy.toLua(t)
+end
+
 return meowy
