@@ -51,6 +51,18 @@ function meowy.loadFile(filename, isLove)
   return t
 end
 
+function meowy.toLuaArg(arg)
+  if tonumber(arg) then
+    return arg
+  elseif string.sub(arg, 1, 1) == '"' then
+    return arg
+  elseif meowy.specialWords[arg] then
+    return meowy.specialWords[arg]
+  else
+    return "nil"
+  end
+end
+
 function meowy.toLuaFunc(line, d)
   local luas = ""
   if not d.onlyargs then
