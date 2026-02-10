@@ -41,7 +41,7 @@ function meowy.loadFile(filename, isLove)
   local t = {}
   for line in itfunc(filename) do
     local l = {}
-    for word in string.gmatch(line, "%S+")
+    for word in string.gmatch(line, "%S+") do
       table.insert(l, word)
     end
     table.insert(t, l)
