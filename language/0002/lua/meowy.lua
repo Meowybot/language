@@ -81,6 +81,8 @@ function meowy.toLuaFunc(line, d)
   local NestStart = 0
   local NestEnd = 0
   local NestAmount = 0
+  local hasstring = false
+  local currstrig = ""
   for i = 2, #line do
     if not isNested then
       if string.sub(line[i], 1, 1) == "(" then
@@ -101,6 +103,25 @@ function meowy.toLuaFunc(line, d)
         if NestAmount == 0 then
           NestEnd = i
           break
+        else
+          local j = 1
+          local stillend = false
+          while NestAmount > 0 do
+            if string.sub(line[i], -j, -j) == ")" then
+              NestAmount = NestAmount - 1
+              if NestAmount == 0 then
+                NestEnd = i
+                stillend = true
+                break
+              end
+            else
+              break
+            end
+            j = j + 1
+          end
+          if stillend then
+            break
+          end
         end
       elseif string.sub(line[i], 1, 1 == "(" and NestAmount > 0 then
         NestAmount = NestAmount + 1
