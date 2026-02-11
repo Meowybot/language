@@ -34,6 +34,9 @@ meowy.specialFuncs = {}
 
 meowy.specialWords = {}
 
+meowy.specialWords["true"] = "true"
+meowy.specialWords["false"] = "false"
+
 
 function meowy.loadFile(filename, isLove)
   local itfunc = io.lines
@@ -134,6 +137,14 @@ function meowy.toLuaFunc(line, d)
 end
 
 function meowy.toLua(t)
+  local luas = ""
+  for li, line in ipairs(t) do
+    if meowy.reserved[line[1]] then
+      luas = luas .. meowy.reserved[line[1]](line, {})
+    else
+      luas = luas .. meowy.toLuaFunc(line, {})
+    end
+  end
 end
 
 return meowy
