@@ -71,6 +71,8 @@ function meowy.toLuaFunc(line, d)
   if not d.onlyargs then
     if meowy.uf[line[1]] then
       luas = luas .. "meowy.uf['" .. line[1] .. "']("
+    elseif meowy.specialFuncs[line[1]] then
+      return meowy.specialFuncs[line[1]](line, {})
     else
       luas = luas .. "meowy.funcs['" .. line[1] .. "']("
     end
@@ -160,8 +162,6 @@ function meowy.toLua(t)
   for li, line in ipairs(t) do
     if meowy.reserved[line[1]] then
       luas = luas .. meowy.reserved[line[1]](line, {})
-    elseif meowy.specialFuncs[line[1]] then
-      luas = luas .. meowy.specialFuncs[line[1]](line, {})
     else
       luas = luas .. meowy.toLuaFunc(line, {})
     end
