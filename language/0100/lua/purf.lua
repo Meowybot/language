@@ -28,12 +28,13 @@ function purf.toTable(t)
   local r = {}
   local currsec = nil
   local nests = {}
-  local currnested = nil
+  local currnested = r
   for i, v in ipairs(t) do
     if not currsec then
       if string.sub(v, 1, 1) == "#" then
         currsec = string.sub(v, 2, -3)
         r[currsec] = r[currsec] or {}
+        currnested = r[currsec]
       end
     else
       if v == "}" then
@@ -41,7 +42,7 @@ function purf.toTable(t)
       else
         if string.sub(v, 1, 1) == "*" then
           table.insert(nests, "LIST"..string.sub(v, 2, -3))
-          if #nests > 1 then
+          if #nests >= 1 then
             local y = string.sub(v, 2, -3)
             currnested[y] = currnested[y] or {____type = "list"}
           else
@@ -50,7 +51,8 @@ function purf.toTable(t)
             currnested = r[currsec][y]
           end
         else
-          --hmm
+          local y = splitVariable(v)
+          currnested[y[1]] = y[2]
         end
       end
     end
