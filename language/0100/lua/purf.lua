@@ -41,14 +41,18 @@ function purf.toTable(t)
         currsec = nil
       else
         if string.sub(v, 1, 1) == "*" then
-          table.insert(nests, "LIST"..string.sub(v, 2, -3))
+          table.insert(nests, "L"..string.sub(v, 2, -3))
+          local y = string.sub(v, 2, -3)
+          currnested[y] = currnested[y] or {____type = "list"}
+          currnested = currnested[y]
+        elseif string.sub(v, 1, 1) == "]" then
+          nests[#nests] = nil
+          currnested = r[currsec]
           if #nests >= 1 then
-            local y = string.sub(v, 2, -3)
-            currnested[y] = currnested[y] or {____type = "list"}
+            for k, z in ipairs(nests) do
+              currnested = currnested[string.sub(z, 2, -1)]
+            end
           else
-            local y = string.sub(v, 2, -3)
-            r[currsec][y] = r[currsec][y] or {____type = "list"}
-            currnested = r[currsec][y]
           end
         else
           local y = splitVariable(v)
