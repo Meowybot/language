@@ -25,10 +25,10 @@ mwn.datatypes = {
     end
     return {
       __type = "color",
-      r = bit.rshift(bit.band(c, 0xFF0000), 16),
-      g = bit.rshift(bit.band(c, 0xFF00), 8),
-      b = bit.band(c, 0xFF),
-      a = a
+      r = (bit.rshift(bit.band(c, 0xFF0000), 16))/255,
+      g = (bit.rshift(bit.band(c, 0xFF00), 8))/255,
+      b = (bit.band(c, 0xFF))/255,
+      a = a/255
     }
   end
 }
