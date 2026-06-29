@@ -13,7 +13,20 @@ mwn.datatypes = {
     return v ~= "false"
   end,
   ["color"] = function(v)
-    
+    local u = tonumber("0x"..v)
+    local c
+    local a
+    if u > 0xFFFFFF then
+      c = bit.rshift(bit.band(u, 0xFFFFFF00), 8)
+      a = bit.band(u, 0xFF)
+    else
+      c = u
+      a = 0xFF
+    end
+    return {
+      __type = "color",
+      r = 0
+    }
   end
 }
 
