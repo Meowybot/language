@@ -3,6 +3,8 @@ local bit = require("bit")
 local mwn = {}
 
 mwn.datatypes = {
+  to,
+  from,
   ["string"] = function(v)
     return tostring(v)
   end,
