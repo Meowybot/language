@@ -1,3 +1,5 @@
+local bit = require("bit")
+
 local mwn = {}
 
 mwn.datatypes = {
@@ -9,6 +11,9 @@ mwn.datatypes = {
   end,
   ["boolean"] = function(v)
     return v ~= "false"
+  end,
+  ["color"] = function(v)
+    
   end
 }
 
