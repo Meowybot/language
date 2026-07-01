@@ -2,37 +2,47 @@ local bit = require("bit")
 
 local mwn = {}
 
-mwn.datatypes = {
-  from = {
-    ["string"] = function(v)
-      return tostring(v)
-    end,
-    ["number"] = function(v)
-      return tonumber(v) or 0
-    end,
-    ["boolean"] = function(v)
-      return v ~= "false"
-    end,
-    ["color"] = function(v)
-      local u = tonumber("0x"..v)
-      local c
-      local a
-      if u > 0xFFFFFF then
-        c = bit.rshift(bit.band(u, 0xFFFFFF00), 8)
-        a = bit.band(u, 0xFF)
-      else
-        c = u
-        a = 0xFF
+function mwn.toTable(name)
+  
+  -- variable initialization
+  local t = {}
+  local currlinen = 0
+  local currsec = nil
+  local nests = {}
+  nests[0] = "section"
+  local nestn = {}
+  nestn[0] = "SECTION"
+  local nesta = #nests
+  
+  -- every line, do this:
+  for lineu in love.filesystem.lines(name) do
+    currlinen = currlinen + 1
+    local line = string.gsub(lineu, "^%s+", "")
+    local firstchar = string.sub(line,1,1)
+    local secndchar = string.sub(line,2,2)
+    local lastchar = string.sub(line,-1,-1)
+    local midstring = string.sub(line,2,-3)
+    
+    -- if this aint in a section
+    if not currsec then
+      
+      -- make it be a section
+      if firstchar == "#" then
+        currsec = midstring
+        t[currsec] = t[currsec] or {}
       end
-      return {
-        __type = "color",
-        r = (bit.rshift(bit.band(c, 0xFF0000), 16))/255,
-        g = (bit.rshift(bit.band(c, 0xFF00), 8))/255,
-        b = (bit.band(c, 0xFF))/255,
-        a = a/255
-      }
+      
+      -- if this be in a section
+    else
+      
+      -- section talk end
     end
-  }
-}
+    
+    -- stop doing every line
+  end
+end
+
+function mwn.toMeowin(t)
+end
 
 return mwn
